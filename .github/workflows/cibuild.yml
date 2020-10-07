@@ -13,17 +13,9 @@ jobs:
   JDK_Matrix:
     strategy:
       matrix:
-        java: [ 11, 15 ]
+        java: [ 8 ]
         os: [ ubuntu-latest ]
-        include:
-        - os: windows-latest
-          java: 8
-        - os: ubuntu-latest
-          java: 8
-          codecov: true
-          canonical: ${{ (github.repository == 'rotty3000/osgi-test-example-mvn') && ((github.ref == 'refs/heads/main') || (github.ref == 'refs/heads/release')) && (github.event_name != 'pull_request') }}
-          mavenopts: -Pjacoco
-    name: JDK${{ matrix.java }} ${{ matrix.os }} ${{ matrix.mavenopts }}
+    name: JDK${{ matrix.java }} ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     steps:
     - name: Git Checkout
@@ -35,4 +27,4 @@ jobs:
     - name: Build
       id: build
       run: |
-        ./.github/scripts/build.sh ${{ matrix.mavenopts }}
+        ./.github/scripts/build.sh
