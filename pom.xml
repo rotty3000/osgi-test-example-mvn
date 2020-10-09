@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	* Copyright (c) OSGi Alliance (2020). All Rights Reserved.
-	*
-	* Licensed under the Apache License, Version 2.0 (the "License");
-	* you may not use this file except in compliance with the License.
-	* You may obtain a copy of the License at
-	*
-	* http://www.apache.org/licenses/LICENSE-2.0
-	*
-	* Unless required by applicable law or agreed to in writing, software
-	* distributed under the License is distributed on an "AS IS" BASIS,
-	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	* See the License for the specific language governing permissions and
-	* limitations under the License.
--->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.osgi</groupId>
+	<groupId>org.osgi.test.example</groupId>
 	<artifactId>org.osgi.test.example.parent</artifactId>
 	<description>OSGi Testing Example Parent</description>
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -41,8 +28,8 @@
 
 	<modules>
 		<module>org.osgi.test.example.api</module>
-		<module>org.osgi.test.example.impl</module>
-		<module>org.osgi.test.example.test</module>
+		<module>org.osgi.test.example.player.impl</module>
+		<module>org.osgi.test.example.player.test</module>
 	</modules>
 
 	<url>https://www.osgi.org</url>
@@ -107,6 +94,12 @@
 							<goals>
 								<goal>bnd-process</goal>
 							</goals>
+							<configuration>
+								<bnd><![CDATA[
+								-noextraheaders: true
+								-noimportjava: true
+								]]></bnd>
+							</configuration>
 						</execution>
 					</executions>
 				</plugin>
@@ -126,9 +119,6 @@
 								<bndruns>
 									<bndrun>test.bndrun</bndrun>
 								</bndruns>
-								<bundles>
-									<bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
-								</bundles>
 								<failOnChanges>false</failOnChanges>
 								<includeDependencyManagement>true</includeDependencyManagement>
 								<reportOptional>false</reportOptional>
@@ -156,9 +146,6 @@
 								<bndruns>
 									<bndrun>test.bndrun</bndrun>
 								</bndruns>
-								<bundles>
-									<bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
-								</bundles>
 								<failOnChanges>false</failOnChanges>
 								<includeDependencyManagement>true</includeDependencyManagement>
 								<resolve>false</resolve>
@@ -317,7 +304,7 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -363,24 +350,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>biz.aQute.bnd</groupId>
-				<artifactId>bnd-baseline-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>baseline</id>
-						<goals>
-							<goal>baseline</goal>
-						</goals>
-						<!-- Disable baseline validation until we are at version > 1.0.0.
-							Then change inherited to false. -->
-						<inherited>true</inherited>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
@@ -417,21 +386,21 @@
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.service.log</artifactId>
-				<version>1.4.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.osgi</groupId>
 				<artifactId>osgi.core</artifactId>
 				<version>7.0.0</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.service.cm</artifactId>
-				<version>1.6.0</version>
-				<scope>compile</scope>
+				<artifactId>org.osgi.namespace.service</artifactId>
+				<version>1.0.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.service.component.annotations</artifactId>
+				<version>1.4.0</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
@@ -506,6 +475,18 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.test.assertj.framework</artifactId>
+				<version>${osgi-test.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.test.junit5</artifactId>
+				<version>${osgi-test.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.osgi</artifactId>
 				<version>3.16.0</version>
@@ -513,8 +494,8 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
-				<artifactId>org.apache.felix.configadmin</artifactId>
-				<version>1.9.18</version>
+				<artifactId>org.apache.felix.scr</artifactId>
+				<version>2.1.24</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
@@ -542,6 +523,32 @@
 			<properties>
 				<maven.compiler.release>${java.release}</maven.compiler.release>
 			</properties>
+		</profile>
+		<profile>
+			<id>bnd-next</id>
+			<properties>
+				<bnd.version>5.2.0-SNAPSHOT</bnd.version>
+			</properties>
+			<repositories>
+				<repository>
+					<id>bnd-snapshots</id>
+					<url>https://bndtools.jfrog.io/bndtools/libs-snapshot/</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>bnd-snapshots</id>
+					<url>https://bndtools.jfrog.io/bndtools/libs-snapshot/</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+				</pluginRepository>
+			</pluginRepositories>
 		</profile>
 		<profile>
 			<id>jacoco</id>
