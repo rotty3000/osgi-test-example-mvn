@@ -67,6 +67,13 @@
 			<id>rotty3000</id>
 			<name>Ray Augé</name>
 			<email>raymond.auge@liferay.com</email>
+			<url>https://rotty3000.github.io</url>
+			<organization>Liferay Inc.</organization>
+			<organizationUrl>https://www.liferay.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>America/New_York</timezone>
 		</developer>
 		<developer>
 			<id>kriegfrj</id>
@@ -98,6 +105,7 @@
 								<bnd><![CDATA[
 								-noextraheaders: true
 								-noimportjava: true
+								-fixupmessages: The JAR is empty:
 								]]></bnd>
 							</configuration>
 						</execution>
@@ -119,6 +127,9 @@
 								<bndruns>
 									<bndrun>test.bndrun</bndrun>
 								</bndruns>
+								<bundles>
+									<bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
+								</bundles>
 								<failOnChanges>false</failOnChanges>
 								<includeDependencyManagement>true</includeDependencyManagement>
 								<reportOptional>false</reportOptional>
@@ -146,6 +157,9 @@
 								<bndruns>
 									<bndrun>test.bndrun</bndrun>
 								</bndruns>
+								<bundles>
+									<bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
+								</bundles>
 								<failOnChanges>false</failOnChanges>
 								<includeDependencyManagement>true</includeDependencyManagement>
 								<resolve>false</resolve>
@@ -472,6 +486,12 @@
 				<groupId>org.apache.servicemix.bundles</groupId>
 				<artifactId>org.apache.servicemix.bundles.junit</artifactId>
 				<version>4.13_1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.test.common</artifactId>
+				<version>${osgi-test.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
